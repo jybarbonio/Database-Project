@@ -1,0 +1,2 @@
+- upon a new entry, fetch current PC time to timestamp entry
+- description box needed

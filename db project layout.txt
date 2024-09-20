@@ -1,0 +1,33 @@
+Blueprint Ver 7/17/2024 @ 12:43 AM
+
+Use Case:
+	Initially a small app intended for one or a few users, ideally scalable to online remote access
+	to DB server and taking several hundred queries a day. Maps frontline/combat positions given GPS
+	coordinates, date, description box for sources, and supports an attachable displayed picture.
+	Order of operations and possibly an 'export' to GIS should be implented.
+	
+	Framework ideas:
+	- SCS island control table with GIS embedded map with dredging expansion
+	- Car cost calculator
+
+NOTES:
+	- MS SQL Server can run on Linux
+	- MS Access cannot run natively on Linux
+
+Hardware:
+	- Raspberry Pi 4? (likely too slow)
+	- ALT: A dedicated Windows compact/low power server PC
+	
+Backend:
+	- MS SQL Server
+	- pyodbc SQL driver for Python
+	
+Frontend:
+	- (initial) tkinter/PyQt
+	- (later) MS Access
+	
+
+Links:
+https://stackoverflow.com/questions/33725862/connecting-to-microsoft-sql-server-using-python
+https://www.youtube.com/watch?v=HjNHATw6XgY
+https://learn.microsoft.com/en-us/sql/connect/python/python-driver-for-sql-server?view=sql-server-ver16
