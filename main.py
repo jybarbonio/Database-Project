@@ -55,9 +55,10 @@ def pyxl_formulas(arr):
         for j, cell in enumerate(row):
             print(i, j)
             if isinstance(cell, str):
-                # re.escape() to exclude special regex chars
-                if re.search(cell, '='):
-                    print("formula at ", i, j)
+                s =  re.search('\A=', cell)
+
+                if s:
+                    print("formula: ", arr[i][j])
                 else:
                     print(cell)
             else:
@@ -69,7 +70,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.table = QtWidgets.QTableView()
 
-        filename = 'Car Price List.xlsx'
+        filename = 'Car Price List_test.xlsx'
 
         t_data = pyxl_load_workbook(filename)
         f_data = pyxl_formulas(t_data)
