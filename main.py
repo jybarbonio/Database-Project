@@ -1,10 +1,12 @@
 from openpyxl import load_workbook
+from openpyxl.workbook.views import BookView
 
-
-import sys
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtCore import Qt
 
+import re
+import sys
+import formulas
 
 class TableModel(QtCore.QAbstractTableModel):
     def __init__(self, data):
@@ -27,6 +29,39 @@ class TableModel(QtCore.QAbstractTableModel):
         # the length (only works if all rows are an equal length)
         return len(self._data[0])
 
+def pyxl_load_workbook(f):
+    # wb = 'workbook'
+    wb = load_workbook(filename = f, keep_vba=True, rich_text=True)
+    row = wb['Sheet1']
+
+    #ws = 'worksheet'
+    ws = wb.active
+
+    arr = []
+
+    for row in ws.iter_rows():
+        arr_row = []    
+        for cell in row:
+            #print(cell.value)
+            arr_row.append(cell.value)
+
+        arr.append(arr_row)
+
+    return arr
+
+def pyxl_formulas(arr):
+
+    for i, row in enumerate(arr):
+        for j, cell in enumerate(row):
+            print(i, j)
+            if isinstance(cell, str):
+                # re.escape() to exclude special regex chars
+                if re.search(cell, '='):
+                    print("formula at ", i, j)
+                else:
+                    print(cell)
+            else:
+                print(cell)
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -36,36 +71,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         filename = 'Car Price List.xlsx'
 
-        data = pyxl_load_workbook(filename)
+        t_data = pyxl_load_workbook(filename)
+        f_data = pyxl_formulas(t_data)
 
-        self.model = TableModel(data)
+
+        self.model = TableModel(t_data)
         self.table.setModel(self.model)
 
         self.setCentralWidget(self.table)
 
-def pyxl_load_workbook(f):
-    # wb = 'workbook'
-    wb = load_workbook(filename = f, keep_vba=True, rich_text=True)
-    row = wb['Sheet1']
 
-    #ws = 'worksheet'
-    ws = wb.active
-
-    ws.sheet_properties.pageSetUpPr.fitToPage = True
-    ws.page_setup.fitToHeight = False
-
-    arr = []
-
-    for row in ws.iter_rows():
-        arr_row = []    
-        for cell in row:
-            print(cell.value)
-            arr_row.append(cell.value)
-
-        arr.append(arr_row)
-
-    return arr
-    
 app=QtWidgets.QApplication(sys.argv)
 window=MainWindow()
 
